@@ -49,7 +49,7 @@ class Regression:
 
         # Coefficients
         with col1:
-            st.markdown("Coefficients")
+            st.markdown("Coefficients hihi")
             st.dataframe(pd.DataFrame({"Coefficients":[model.intercept_, model.coef_[0]]}))
 
         # Residuals Statistics\
