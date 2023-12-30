@@ -12,7 +12,7 @@ import scipy.stats as stats
 from scipy.stats import t
 from modules import Chart, Info, Regression, Classification, Clustering
 
-st.set_page_config("DataApp",layout="wide",initial_sidebar_state="expanded",)
+st.set_page_config("DataApp", layout="wide", initial_sidebar_state="expanded", )
 
 
 def footer():
@@ -56,7 +56,7 @@ def footer():
     )
 
     st.markdown(
-    """
+        """
         <div class="a">
             <h6>Liên hệ với tôi</h6>
             <div class="icon-list">
@@ -79,7 +79,8 @@ def footer():
         </div>
         """,
         unsafe_allow_html=True,
-)
+    )
+
 
 def search():
     st.markdown("""
@@ -130,23 +131,23 @@ def search():
             </style>
             </head>
             <body>
-            """, 
-            unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True)
 
     st.markdown("""
             <form class="example" action="" style="margin:auto;max-width:800px">
             <input type="text" placeholder="Search.." name="search2">
             <button type="submit"><i class="fa fa-search"></i></button>
             </form>""",
-            unsafe_allow_html=True)
+                unsafe_allow_html=True)
     st.markdown(
-                """
+        """
                 <head>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
                 </head>
                 """,
-                unsafe_allow_html=True
-            )
+        unsafe_allow_html=True
+    )
 
 
 @st.cache_data
@@ -158,18 +159,14 @@ def load_data(file):
         return pd.read_excel(file)
 
 
-
 def summary(df):
     summary = df.describe()
     return summary
 
+
 def summary_p(df):
     summary = df.describe()
     return summary
-
-   
-
-
 
 
 ### analyze_data      
@@ -180,6 +177,7 @@ def analyze_data(data):
     st.write("Data")
     with st.expander("See data", expanded=True):
         edited_df = st.data_editor(data,use_container_width=True,num_rows="dynamic")
+
     st.markdown("---")
     ######
     st.write("#### Thống kê mô tả một chiều ####")
@@ -187,62 +185,54 @@ def analyze_data(data):
     st.markdown("###### Bảng giá trị thống kê mô tả ######")
     use_sample_stats = st.checkbox('Hiệu chỉnh mẫu thống kê', value=True)
     if use_sample_stats:
-    # compute and show the sample statistics
-        st.dataframe(summary(edited_df),use_container_width=True)
+        # compute and show the sample statistics
+        st.dataframe(summary(edited_df), use_container_width=True)
         st.download_button(
-        label="Download data as CSV",
-        data=summary(data).to_csv(index=False),
-        file_name='data_analyze.csv',
-        mime='text/csv')
-   
+            label="Download data as CSV",
+            data=summary(data).to_csv(index=False),
+            file_name='data_analyze.csv',
+            mime='text/csv')
+
     else:
-    # compute and show the population statistics
-        st.dataframe(summary_p(edited_df),use_container_width=True)
+        # compute and show the population statistics
+        st.dataframe(summary_p(edited_df), use_container_width=True)
         st.download_button(
-        label="Download data as CSV",
-        data=summary_p(data).to_csv(index=False),
-        file_name='data_analyze.csv',
-        mime='text/csv')
+            label="Download data as CSV",
+            data=summary_p(data).to_csv(index=False),
+            file_name='data_analyze.csv',
+            mime='text/csv')
     footer()
 
 
-#### Data viusualyzation
-
-
-
+#### Data visualization
 
 #### hypothesis test
 
-
-
-        
-       
 # main function
 def main():
-
     with st.sidebar:
         st.sidebar.markdown("---")
         st.markdown("#### Chọn chức năng ####")
-        selected = option_menu(None, ["Dữ liệu", "Thống kê", "Trực quan hóa", "Hồi quy", "Phân lớp","Phân cụm"], 
-            icons=['clipboard-data', 'table', "bar-chart-fill", 'rulers', 'diamond-half'], 
-            menu_icon="cast", default_index=0,styles={
-                                   "st": {"padding": "5!important", "background-color": "#fafafa"},
-                                   "icon": {"color": "black", "font-size": "15px"},
-                                   "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px",
-                                                "--hover-color": "#eee"},
-                                   })
+        selected = option_menu(None, ["Dữ liệu", "Thống kê", "Trực quan hóa", "Hồi quy", "Phân lớp", "Phân cụm"],
+                               icons=['clipboard-data', 'table', "bar-chart-fill", 'rulers', 'diamond-half'],
+                               menu_icon="cast", default_index=0, styles={
+                "st": {"padding": "5!important", "background-color": "#fafafa"},
+                "icon": {"color": "black", "font-size": "15px"},
+                "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px",
+                             "--hover-color": "#eee"},
+            })
 
     with st.container():
         with st.sidebar:
             st.sidebar.markdown("---")
             st.markdown("#### Tải lên dữ liệu ####")
-            file = st.file_uploader("",type=["csv", "xlsx", "xls"])
+            file = st.file_uploader("", type=["csv", "xlsx", "xls"])
 
         if file is not None:
 
             data = load_data(file)
 
-            if selected =='Dữ liệu':
+            if selected == 'Dữ liệu':
                 search()
                 Info.info(data)
 
@@ -250,38 +240,38 @@ def main():
                 search()
                 analyze_data(data)
 
-            if selected =='Trực quan hóa':
+            if selected == 'Trực quan hóa':
                 search()
                 st.write(" # Trực quan hóa dữ liệu # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data= st.data_editor(data,use_container_width=True,num_rows="dynamic")
+                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 st.write("#### Chọn loại biểu đồ ####")
-                chart_type = st.selectbox("", ["Bar"])
+                chart_type = st.selectbox("", ["Bar", "Line", "Scatter", "Pie", "Boxplot", "Heatmap"])
 
                 Chart.create_chart(chart_type, edit_data)
-                
+
             if selected == 'Hồi quy':
                 search()
-                
+
                 st.write(" # Hồi quy tuyến tính # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data= st.data_editor(data,use_container_width=True,num_rows="dynamic")
+                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 regression_type = st.selectbox("", ["Hồi quy một biến", 'Hồi quy đa biến'])
-                if regression_type =="Hồi quy một biến":
+                if regression_type == "Hồi quy một biến":
                     Regression.simple_linear_regresstion(data)
                 if regression_type == "Hồi quy đa biến":
                     Regression.multiple_linear_regression(data)
-                    
+
             if selected == 'Phân lớp':
                 search()
                 st.write(" # Phân lớp # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data= st.data_editor(data,use_container_width=True,num_rows="dynamic")
+                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 class_type = st.selectbox("", ["KNN", 'Logistic Regression', 'Random Forest', 'Naive Bayes', 'SVM'])
                 if class_type == 'KNN':
@@ -294,14 +284,13 @@ def main():
                     Classification.naivebayes_classification(data)
                 if class_type == 'SVM':
                     Classification.svm_classification(data)
-                
-            
+
             if selected == 'Phân cụm':
                 search()
                 st.write(" # Phân cụm # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data= st.data_editor(data,use_container_width=True,num_rows="dynamic")
+                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 class_type = st.selectbox("", ["K Means", 'DBSCAN', 'Mean Shift'])
                 if class_type == 'K Means':
@@ -310,8 +299,6 @@ def main():
                     Clustering.dbscan_clustering(data)
                 if class_type == 'Mean Shift':
                     Clustering.mean_shift_clustering(data)
-
-                
 
             # if selected =='Kiểm định':
             #     search()
@@ -326,18 +313,12 @@ def main():
         else:
             st.balloons()
             st.markdown(
-        """
+                """
         <h1>Trang chủ</h1>
         """,
-        unsafe_allow_html=True,
-)
-            
-    
+                unsafe_allow_html=True,
+            )
+
+
 if __name__ == "__main__":
     main()
-    
-
-    
-
-    
-

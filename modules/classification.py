@@ -13,7 +13,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
+import plotly.figure_factory as ff
 
 
 def get_classification_report(y_test, y_pred):
@@ -58,7 +59,56 @@ class Classification:
             # Display the results
             st.markdown("### K-Nearest Neighbors Classification Results ###")
             st.markdown("Number of Cases: {}".format(X_train.shape[0]))
-            st.dataframe(get_classification_report(y_test, y_pred))
+
+            # Create two columns
+            col1, col2 = st.columns(2)
+
+            # Display the classification report in the first column
+            with col1:
+                st.markdown("##### Classification report #####")
+                st.markdown("<div style='margin-top: 60px'></div>", unsafe_allow_html=True)
+                st.dataframe(get_classification_report(y_test, y_pred))
+
+            # Display the confusion matrix in the second column
+            with col2:
+                st.markdown("##### Confusion matrix #####")
+                cm = confusion_matrix(y_test, y_pred)
+                cm = cm.tolist()
+                labels = np.unique(y_test)
+                fig = px.imshow(cm, labels=dict(x="Predicted", y="Actual", color="Count"),
+                x=labels, y=labels, text_auto=True)
+                st.plotly_chart(fig)
+
+            # Get the column names from the data
+            columns = data.columns.tolist()
+
+            columns.remove(target_column)
+
+            # Create a dictionary to store the entered values
+            inputs = {}
+
+            # Create a list of columns
+            cols = st.columns(len(columns))
+
+            # Create a text field for each column in the corresponding column
+            for i, column in enumerate(columns):
+                inputs[column] = cols[i].text_input(f'Value for {column}')
+
+            # Create a dataframe from the entered values
+            input_data = pd.DataFrame([inputs])
+            for column in input_data.columns:
+                input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+            if input_data.isnull().values.any():
+                st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+            else:
+                input_data = pd.get_dummies(input_data)
+                input_data = input_data.reindex(columns=X.columns, fill_value=0)
+                # Make a prediction
+                prediction = knn.predict(input_data)
+
+                # Display the prediction
+                st.write('The predicted label is: ', prediction[0])
 
     def lgreg_classification(data):
         # Create a copy of the data
@@ -89,7 +139,55 @@ class Classification:
         # Display the results
         st.markdown("### Logistic Regression Classification Results ###")
         st.markdown("Number of Cases: {}".format(X_train.shape[0]))
-        st.dataframe(get_classification_report(y_test, y_pred))
+        # Create two columns
+        col1, col2 = st.columns(2)
+
+        # Display the classification report in the first column
+        with col1:
+            st.markdown("##### Classification report #####")
+            st.markdown("<div style='margin-top: 60px'></div>", unsafe_allow_html=True)
+            st.dataframe(get_classification_report(y_test, y_pred))
+
+        # Display the confusion matrix in the second column
+        with col2:
+            st.markdown("##### Confusion matrix #####")
+            cm = confusion_matrix(y_test, y_pred)
+            cm = cm.tolist()
+            labels = np.unique(y_test)
+            fig = px.imshow(cm, labels=dict(x="Predicted", y="Actual", color="Count"),
+            x=labels, y=labels, text_auto=True)
+            st.plotly_chart(fig)
+
+        # Get the column names from the data
+        columns = data.columns.tolist()
+
+        columns.remove(target_column)
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = pd.get_dummies(input_data)
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = knn.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
 
     def randomfor_classification(data):
         # Create a copy of the data
@@ -120,7 +218,55 @@ class Classification:
         # Display the results
         st.markdown("### Random Forest Classification Results ###")
         st.markdown("Number of Cases: {}".format(X_train.shape[0]))
-        st.dataframe(get_classification_report(y_test, y_pred))
+        # Create two columns
+        col1, col2 = st.columns(2)
+
+        # Display the classification report in the first column
+        with col1:
+            st.markdown("##### Classification report #####")
+            st.markdown("<div style='margin-top: 60px'></div>", unsafe_allow_html=True)
+            st.dataframe(get_classification_report(y_test, y_pred))
+
+        # Display the confusion matrix in the second column
+        with col2:
+            st.markdown("##### Confusion matrix #####")
+            cm = confusion_matrix(y_test, y_pred)
+            cm = cm.tolist()
+            labels = np.unique(y_test)
+            fig = px.imshow(cm, labels=dict(x="Predicted", y="Actual", color="Count"),
+            x=labels, y=labels, text_auto=True)
+            st.plotly_chart(fig)
+
+        # Get the column names from the data
+        columns = data.columns.tolist()
+
+        columns.remove(target_column)
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = pd.get_dummies(input_data)
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = knn.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
 
     def naivebayes_classification(data):
         # Create a copy of the data
@@ -148,7 +294,55 @@ class Classification:
         # Display the results
         st.markdown("### Naive-Bayes Classification Results ###")
         st.markdown("Number of Cases: {}".format(X_train.shape[0]))
-        st.dataframe(get_classification_report(y_test, y_pred))
+        # Create two columns
+        col1, col2 = st.columns(2)
+
+        # Display the classification report in the first column
+        with col1:
+            st.markdown("##### Classification report #####")
+            st.markdown("<div style='margin-top: 60px'></div>", unsafe_allow_html=True)
+            st.dataframe(get_classification_report(y_test, y_pred))
+
+        # Display the confusion matrix in the second column
+        with col2:
+            st.markdown("##### Confusion matrix #####")
+            cm = confusion_matrix(y_test, y_pred)
+            cm = cm.tolist()
+            labels = np.unique(y_test)
+            fig = px.imshow(cm, labels=dict(x="Predicted", y="Actual", color="Count"),
+            x=labels, y=labels, text_auto=True)
+            st.plotly_chart(fig)
+
+        # Get the column names from the data
+        columns = data.columns.tolist()
+
+        columns.remove(target_column)
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = pd.get_dummies(input_data)
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = knn.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
 
     def svm_classification(data):
         # Create a copy of the data
@@ -176,4 +370,52 @@ class Classification:
         # Display the results
         st.markdown("### SVM Classification Results ###")
         st.markdown("Number of Cases: {}".format(X_train.shape[0]))
-        st.dataframe(get_classification_report(y_test, y_pred))
+        # Create two columns
+        col1, col2 = st.columns(2)
+
+        # Display the classification report in the first column
+        with col1:
+            st.markdown("##### Classification report #####")
+            st.markdown("<div style='margin-top: 60px'></div>", unsafe_allow_html=True)
+            st.dataframe(get_classification_report(y_test, y_pred))
+
+        # Display the confusion matrix in the second column
+        with col2:
+            st.markdown("##### Confusion matrix #####")
+            cm = confusion_matrix(y_test, y_pred)
+            cm = cm.tolist()
+            labels = np.unique(y_test)
+            fig = px.imshow(cm, labels=dict(x="Predicted", y="Actual", color="Count"),
+            x=labels, y=labels, text_auto=True)
+            st.plotly_chart(fig)
+
+        # Get the column names from the data
+        columns = data.columns.tolist()
+
+        columns.remove(target_column)
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = pd.get_dummies(input_data)
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = knn.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
