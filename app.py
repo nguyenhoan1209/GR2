@@ -178,7 +178,7 @@ def analyze_data(data):
     st.write(" # Data Analysis # ")
     st.write("#### Dữ liệu ####")
     st.write("Data")
-    with st.expander("See explanation"):
+    with st.expander("See data", expanded=True):
         edited_df = st.data_editor(data,use_container_width=True,num_rows="dynamic")
     st.markdown("---")
     ######
