@@ -260,11 +260,13 @@ def main():
                 st.write("Data")
                 edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
-                regression_type = st.selectbox("", ["Hồi quy một biến", 'Hồi quy đa biến'])
-                if regression_type == "Hồi quy một biến":
+                regression_type = st.selectbox("", ["OLS Linear Regression", 'Ridge', 'Lasso'])
+                if regression_type == "OLS Linear Regression":
                     Regression.simple_linear_regresstion(data)
-                if regression_type == "Hồi quy đa biến":
-                    Regression.multiple_linear_regression(data)
+                if regression_type == "Ridge":
+                    Regression.ridge_regression(data)
+                if regression_type == "Lasso":
+                    Regression.lasso_regression(data)
 
             if selected == 'Phân lớp':
                 search()
