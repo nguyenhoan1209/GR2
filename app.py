@@ -245,7 +245,8 @@ def main():
                 st.write(" # Trực quan hóa dữ liệu # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
+                with st.expander("See data", expanded=True):
+                    edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 st.write("#### Chọn loại biểu đồ ####")
                 chart_type = st.selectbox("", ["Bar", "Line", "Scatter", "Pie", "Boxplot", "Heatmap"])
@@ -258,47 +259,50 @@ def main():
                 st.write(" # Hồi quy tuyến tính # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
+                with st.expander("See data", expanded=True):
+                    edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 regression_type = st.selectbox("", ["Hồi quy một biến", 'Hồi quy đa biến'])
                 if regression_type == "Hồi quy một biến":
-                    Regression.simple_linear_regresstion(data)
+                    Regression.simple_linear_regresstion(edit_data)
                 if regression_type == "Hồi quy đa biến":
-                    Regression.multiple_linear_regression(data)
+                    Regression.multiple_linear_regression(edit_data)
 
             if selected == 'Phân lớp':
                 search()
                 st.write(" # Phân lớp # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
+                with st.expander("See data", expanded=True):
+                    edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
                 class_type = st.selectbox("", ["KNN", 'Logistic Regression', 'Random Forest', 'Naive Bayes', 'SVM'])
                 if class_type == 'KNN':
-                    Classification.knn_classification(data)
+                    Classification.knn_classification(edit_data)
                 if class_type == 'Logistic Regression':
-                    Classification.lgreg_classification(data)
+                    Classification.lgreg_classification(edit_data)
                 if class_type == 'Random Forest':
-                    Classification.randomfor_classification(data)
+                    Classification.randomfor_classification(edit_data)
                 if class_type == 'Naive Bayes':
-                    Classification.naivebayes_classification(data)
+                    Classification.naivebayes_classification(edit_data)
                 if class_type == 'SVM':
-                    Classification.svm_classification(data)
+                    Classification.svm_classification(edit_data)
 
             if selected == 'Phân cụm':
                 search()
                 st.write(" # Phân cụm # ")
                 st.write("#### Dữ liệu ####")
                 st.write("Data")
-                edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
+                with st.expander("See data", expanded=True):
+                    edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
                 st.markdown("---")
-                class_type = st.selectbox("", ["K Means", 'DBSCAN', 'Mean Shift'])
+                class_type = st.selectbox("", ["K Means", 'DBSCAN', 'OPTICS'])
                 if class_type == 'K Means':
-                    Clustering.kmeans_clustering(data)
+                    Clustering.kmeans_clustering(edit_data)
                 if class_type == 'DBSCAN':
-                    Clustering.dbscan_clustering(data)
-                if class_type == 'Mean Shift':
-                    Clustering.mean_shift_clustering(data)
+                    Clustering.dbscan_clustering(edit_data)
+                if class_type == 'OPTICS':
+                    Clustering.optics_clustering(edit_data)
 
             # if selected =='Kiểm định':
             #     search()
@@ -312,12 +316,126 @@ def main():
             #     hypothesis_test(test_type, edit_data)
         else:
             st.balloons()
+            container = st.container()
+            with container:
+                with st.spinner(text="Building line"):
+                    with open('timeline.json', "r", encoding="utf-8") as f:
+                        data = f.read()
+                        timeline(data, height=450, )
             st.markdown(
                 """
-        <h1>Trang chủ</h1>
-        """,
-                unsafe_allow_html=True,
+                <style>
+                .b {
+                    margin-top: 50px ;
+                    }
+                </style>
+
+                <div class="b"></div>
+                """,
+                unsafe_allow_html=True
             )
+
+            st.markdown(" ### Làm sao để sử dụng ?")
+            st.markdown(
+                """
+                <style>
+                .b {
+                    margin-top: 50px ;
+                    }
+                </style>
+
+                <div class="b"></div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("""
+                                    <head>
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                    </head>
+                                    <body>
+
+                                    <i class="fa-solid fa-1 fa-beat" style="font-size:70px;color: #ff4b4b;"></i>
+                                    <h5>Tải lên dữ liệu của bạn</h5>
+                                    </body>
+
+
+                                    """, unsafe_allow_html=True)
+                image1 = Image.open("image/im1.png")
+                st.image(image1)
+
+                st.markdown(
+                    """
+                    <style>
+                    .b {
+                        margin-top: 50px ;
+                        }
+                    </style>
+
+                    <div class="b"></div>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.markdown("""
+                                    <head>
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                    </head>
+                                    <body>
+
+                                    <i class="fa-solid fa-3 fa-beat" style="font-size:70px;color: #ff4b4b;"></i>
+                                    <h5>Bắt đầu tính toán </h5>
+                                    </body>
+
+
+                                    """, unsafe_allow_html=True)
+                image3 = Image.open("image/im3.png")
+                st.image(image3)
+
+            with col2:
+                st.markdown("""
+                                    <head>
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                    </head>
+                                    <body>
+
+                                    <i class="fa-solid fa-2 fa-beat" style="font-size:70px;color: #ff4b4b;"></i>
+                                    <h5>Chọn chức năng mong muốn</h5>
+                                    </body>
+
+
+                                    """, unsafe_allow_html=True)
+                image2 = Image.open("image/im2.png")
+                st.image(image2)
+                st.markdown(
+                    """
+                    <style>
+                    .b {
+                        margin-top: 50px ;
+                        }
+                    </style>
+
+                    <div class="b"></div>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.markdown("""
+                                    <head>
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                    </head>
+                                    <body>
+
+                                    <i class="fa-solid fa-4 fa-beat" style="font-size:70px;color: #ff4b4b;"></i>
+                                    <h5>Tải xuống và tiếp tục công việc</h5>
+                                    </body>
+
+
+                                    """, unsafe_allow_html=True)
+                image4 = Image.open("image/im4.png")
+                st.image(image4)
+            container.markdown("---")
+            footer()
 
 
 if __name__ == "__main__":
