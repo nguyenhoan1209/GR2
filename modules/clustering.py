@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import numpy as np
-from sklearn.metrics import silhouette_score
-from sklearn.cluster import KMeans, DBSCAN, MeanShift, estimate_bandwidth
+from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.cluster import KMeans, DBSCAN, OPTICS
 from sklearn.preprocessing import StandardScaler
+import plotly.graph_objects as go
 
 
 class Clustering:
@@ -17,7 +18,7 @@ class Clustering:
         feature_columns = st.multiselect("Chọn biến tính năng", data_number_colum)
 
         # Select the number of clusters
-        n_clusters = st.slider("Chọn số lượng cụm", 1, 10)
+        n_clusters = st.slider("Chọn số lượng cụm", 2, 10)
 
         # Get the data for clustering
         X = data_copy[feature_columns]
@@ -36,15 +37,23 @@ class Clustering:
             # Add cluster labels to the data
             X["cluster"] = kmeans.labels_
             X["cluster"] = X["cluster"].astype(str)
-            fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
-            st.markdown("Number of Clusters: {}".format(n_clusters))
-            st.plotly_chart(fig)
 
-            if len(set(kmeans.labels_)) > 1:  # Only calculate if more than one cluster
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("##### Clustering Visualize #####")
+                if len(feature_columns) <= 2:
+                    fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
+                    st.markdown("Number of Clusters: {}".format(n_clusters))
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    pass
+
+            with col2:
+
+                st.markdown("##### Clustering Result Visualize #####")
                 silhouette_avg = silhouette_score(X_scaled, kmeans.labels_)
                 st.markdown(f"Silhouette Score: {silhouette_avg:.4f}")
-            else:
-                st.markdown("Silhouette Score not calculated for single cluster or noise.")
+                st.dataframe(X, use_container_width=True)
 
     def dbscan_clustering(data):
 
@@ -79,20 +88,22 @@ class Clustering:
             X["cluster"] = X["cluster"].astype(str)
 
             # Visualize the clusters
-            fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
-            st.markdown("Epsilon: {}".format(eps))
-            st.markdown("Minimum Samples: {}".format(min_samples))
-            st.plotly_chart(fig)
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("##### Clustering Visualize #####")
+                if len(feature_columns) <= 2:
+                    fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    pass
 
-            # Calculate silhouette score (if applicable)
-            if len(set(dbscan.labels_)) > 1:  # Only calculate if more than one cluster
+            with col2:
+                st.markdown("##### Clustering Result Visualize #####")
                 silhouette_avg = silhouette_score(X_scaled, dbscan.labels_)
                 st.markdown(f"Silhouette Score: {silhouette_avg:.4f}")
-            else:
-                st.markdown("Silhouette Score not calculated for single cluster or noise.")
+                st.dataframe(X, use_container_width=True)
 
-    def mean_shift_clustering(data):
-
+    def optics_clustering(data):
         # Create a copy of the data
         data_copy = data.copy()
 
@@ -102,26 +113,40 @@ class Clustering:
 
         # Get the data for clustering
         X = data_copy[feature_columns]
-
-        # Standardize the data before clustering
         if not feature_columns:
             st.warning("Chon cot tinh nang")
         else:
             scaler = StandardScaler()
             X_scaled = scaler.fit_transform(X)
 
-            # Estimate bandwidth using a rule of thumb
-            bandwidth = estimate_bandwidth(X_scaled)
+            # Set OPTICS hyperparameters
+            # Adjust default value as needed
+            min_samples = st.slider("Chọn số lượng điểm tối thiểu", 5, 20, value=10)  # Adjust default value as needed
 
-            # Perform Mean Shift clustering
-            ms = MeanShift(bandwidth=bandwidth)
-            ms.fit(X_scaled)
+            # Perform OPTICS clustering
+            optics = OPTICS(min_samples=min_samples, metric='euclidean')
+            optics.fit(X_scaled)
+
+            # Extract DBSCAN-like clusters from the OPTICS output
 
             # Add cluster labels to the data
-            X["cluster"] = ms.labels_
+            X["cluster"] = optics.labels_
             X["cluster"] = X["cluster"].astype(str)
 
             # Visualize the clusters
-            fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
-            st.markdown("Bandwidth: {}".format(bandwidth))
-            st.plotly_chart(fig)
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("##### Clustering Visualize #####")
+                if len(feature_columns) <= 2:
+                    fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    pass
+
+            with col2:
+                st.markdown("##### Clustering Result Visualize #####")
+                silhouette_avg = silhouette_score(X_scaled, optics.labels_)
+                st.markdown(f"Silhouette Score: {silhouette_avg:.4f}")
+                st.dataframe(X, use_container_width=True)
+
+
