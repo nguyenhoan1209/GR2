@@ -4,7 +4,7 @@ import plotly.express as px
 import numpy as np
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.cluster import KMeans, DBSCAN, OPTICS
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import plotly.graph_objects as go
 
 
@@ -16,12 +16,18 @@ class Clustering:
         data_number_colum = data_copy.select_dtypes(include=["int", "float"]).columns
         # Select feature variables
         feature_columns = st.multiselect("Chọn biến tính năng", data_number_colum)
-
-        # Select the number of clusters
-        n_clusters = st.slider("Chọn số lượng cụm", 2, 10)
-
-        # Get the data for clustering
         X = data_copy[feature_columns]
+        # Select the number of clusters
+        col1, col2 = st.columns(2)
+        with col1:
+            n_clusters = st.slider("Chọn số lượng cụm", 2, 10)
+        with col2:
+            option = st.selectbox(
+                "Chọn kiểu scale",
+                ("None", "Standard Scale", "Min-max Scale"),
+                )
+        # Get the data for clustering
+
 
         # Standardize the data before clustering
 
@@ -29,8 +35,14 @@ class Clustering:
         if not feature_columns:
             st.warning("Chon cot tinh nang")
         else:
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
+            if option == "None":
+                X_scaled = X
+            if option == "Standard Scale":
+                scaler = StandardScaler()
+                X_scaled = scaler.fit_transform(X)
+            if option == "Min-max Scale":
+                scaler = MinMaxScaler()
+                X_scaled = scaler.fit_transform(X)
             kmeans = KMeans(n_clusters=n_clusters, random_state=42)
             kmeans.fit(X_scaled)
 
