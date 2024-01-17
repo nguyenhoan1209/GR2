@@ -15,6 +15,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
 import plotly.figure_factory as ff
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 
 def get_classification_report(y_test, y_pred):
@@ -41,8 +42,17 @@ class Classification:
             st.warning("Chon cot tinh nang")
         else:
             # Split the data into training and testing sets
+            standardScaler = StandardScaler()
+            minMaxScaler = MinMaxScaler()
             X = data_copy[feature_columns]
             X = pd.get_dummies(X)
+            scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
+            if scaler_type == 'None':
+                X = X
+            elif scaler_type == 'Standard Scaler':
+                X = standardScaler.fit_transform(X)
+            elif scaler_type == 'Min-max Scaler':
+                X = minMaxScaler.fit_transform(X)
             y = data_copy[target_column]
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -80,9 +90,7 @@ class Classification:
                 st.plotly_chart(fig)
 
             # Get the column names from the data
-            columns = data.columns.tolist()
-
-            columns.remove(target_column)
+            columns = feature_columns
 
             # Create a dictionary to store the entered values
             inputs = {}
@@ -121,8 +129,17 @@ class Classification:
         target_column = st.selectbox("Chọn biến mục tiêu", data_copy.columns)
 
         # Split the data into training and testing sets
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
         X = data_copy[feature_columns]
         X = pd.get_dummies(X)
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
+        if scaler_type == 'None':
+            X = X
+        elif scaler_type == 'Standard Scaler':
+            X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+            X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -159,9 +176,7 @@ class Classification:
             st.plotly_chart(fig)
 
         # Get the column names from the data
-        columns = data.columns.tolist()
-
-        columns.remove(target_column)
+        columns = feature_columns
 
         # Create a dictionary to store the entered values
         inputs = {}
@@ -200,8 +215,17 @@ class Classification:
         target_column = st.selectbox("Chọn biến mục tiêu", data_copy.columns)
 
         # Split the data into training and testing sets
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
         X = data_copy[feature_columns]
         X = pd.get_dummies(X)
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
+        if scaler_type == 'None':
+            X = X
+        elif scaler_type == 'Standard Scaler':
+            X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+            X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -238,9 +262,7 @@ class Classification:
             st.plotly_chart(fig)
 
         # Get the column names from the data
-        columns = data.columns.tolist()
-
-        columns.remove(target_column)
+        columns = feature_columns
 
         # Create a dictionary to store the entered values
         inputs = {}
@@ -279,8 +301,17 @@ class Classification:
         target_column = st.selectbox("Chọn biến mục tiêu", data_copy.columns)
 
         # Split the data into training and testing sets
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
         X = data_copy[feature_columns]
         X = pd.get_dummies(X)
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
+        if scaler_type == 'None':
+            X = X
+        elif scaler_type == 'Standard Scaler':
+            X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+            X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -314,9 +345,7 @@ class Classification:
             st.plotly_chart(fig)
 
         # Get the column names from the data
-        columns = data.columns.tolist()
-
-        columns.remove(target_column)
+        columns = feature_columns
 
         # Create a dictionary to store the entered values
         inputs = {}
@@ -355,17 +384,29 @@ class Classification:
         target_column = st.selectbox("Chọn biến mục tiêu", data_copy.columns)
 
         # Split the data into training and testing sets
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
         X = data_copy[feature_columns]
         X = pd.get_dummies(X)
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
+        if scaler_type == 'None':
+            X = X
+        elif scaler_type == 'Standard Scaler':
+            X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+            X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+        # X_train = scaler.fit_transform(X_train)
+        # X_test = scaler.transform(X_test)
         # Create and train the KNN classifier
         knn = SVC()
         knn.fit(X_train, y_train)
 
         # Make predictions on the test set
         y_pred = knn.predict(X_test)
+
 
         # Display the results
         st.markdown("### SVM Classification Results ###")
@@ -390,9 +431,7 @@ class Classification:
             st.plotly_chart(fig)
 
         # Get the column names from the data
-        columns = data.columns.tolist()
-
-        columns.remove(target_column)
+        columns = feature_columns
 
         # Create a dictionary to store the entered values
         inputs = {}

@@ -12,6 +12,7 @@ from statsmodels.stats.anova import anova_lm
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 
 class Regression:
@@ -29,9 +30,18 @@ class Regression:
         if len(feature_columns) == 0:
             st.error("Please select at least one feature variable.")
             return
-
+        
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
         # Split the data into training and testing sets
         X = data_copy[feature_columns]
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
+        if scaler_type == 'None':
+                X = X
+        elif scaler_type == 'Standard Scaler':
+                X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+                X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -87,6 +97,34 @@ class Regression:
             equation += r" + {:.2f}x_{}".format(coef, i)
         st.markdown(f"The equation is : <span style='color: green'></span>", unsafe_allow_html=True)
         st.latex(equation)
+
+        # Get the column names from the data
+        columns = feature_columns
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = model.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
     
     def ridge_regression(data):
         # Create a copy of the data
@@ -103,8 +141,17 @@ class Regression:
             st.error("Please select at least one feature variable.")
             return
 
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
         # Split the data into training and testing sets
         X = data_copy[feature_columns]
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
+        if scaler_type == 'None':
+                X = X
+        elif scaler_type == 'Standard Scaler':
+                X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+                X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -162,6 +209,34 @@ class Regression:
         st.markdown(f"The equation is : <span style='color: green'></span>", unsafe_allow_html=True)
         st.latex(equation)
 
+        # Get the column names from the data
+        columns = feature_columns
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = model.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
+
     def lasso_regression(data):
         # Create a copy of the data
         data_copy = data.copy()
@@ -177,8 +252,17 @@ class Regression:
             st.error("Please select at least one feature variable.")
             return
 
+        scaler_type = st.selectbox('Chọn kiểu scale',('None', 'Standard Scaler', 'Min-max Scaler'))
         # Split the data into training and testing sets
         X = data_copy[feature_columns]
+        standardScaler = StandardScaler()
+        minMaxScaler = MinMaxScaler()
+        if scaler_type == 'None':
+                X = X
+        elif scaler_type == 'Standard Scaler':
+                X = standardScaler.fit_transform(X)
+        elif scaler_type == 'Min-max Scaler':
+                X = minMaxScaler.fit_transform(X)
         y = data_copy[target_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -235,3 +319,31 @@ class Regression:
             equation += r" + {:.2f}x_{}".format(coef, i)
         st.markdown(f"The equation is : <span style='color: green'></span>", unsafe_allow_html=True)
         st.latex(equation)
+
+        # Get the column names from the data
+        columns = feature_columns
+
+        # Create a dictionary to store the entered values
+        inputs = {}
+
+        # Create a list of columns
+        cols = st.columns(len(columns))
+
+        # Create a text field for each column in the corresponding column
+        for i, column in enumerate(columns):
+            inputs[column] = cols[i].text_input(f'Value for {column}')
+
+        # Create a dataframe from the entered values
+        input_data = pd.DataFrame([inputs])
+        for column in input_data.columns:
+            input_data[column] = pd.to_numeric(input_data[column], errors='ignore')
+
+        if input_data.isnull().values.any():
+            st.warning('Warning: Vui lòng điền đầy đủ các giá trị.')
+        else:
+            input_data = input_data.reindex(columns=X.columns, fill_value=0)
+            # Make a prediction
+            prediction = model.predict(input_data)
+
+            # Display the prediction
+            st.write('The predicted label is: ', prediction[0])
