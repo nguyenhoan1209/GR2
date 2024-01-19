@@ -25,9 +25,8 @@ class Clustering:
             option = st.selectbox(
                 "Chọn kiểu scale",
                 ("None", "Standard Scale", "Min-max Scale"),
-                )
+            )
         # Get the data for clustering
-
 
         # Standardize the data before clustering
 
@@ -79,20 +78,33 @@ class Clustering:
         # Get the data for clustering
         X = data_copy[feature_columns]
 
+        option = st.selectbox(
+            "Chọn kiểu scale",
+            ("None", "Standard Scale", "Min-max Scale"),
+        )
+
         # Standardize the data before clustering
         if not feature_columns:
             st.warning("Chon cot tinh nang")
         else:
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
+            if option == "None":
+                X_scaled = X
+            if option == "Standard Scale":
+                scaler = StandardScaler()
+                X_scaled = scaler.fit_transform(X)
+            if option == "Min-max Scale":
+                scaler = MinMaxScaler()
+                X_scaled = scaler.fit_transform(X)
 
             # Set DBSCAN hyperparameters
-            eps = st.slider("Chọn epsilon (khoảng cách)", 0.1, 1.0, value=0.5)  # Adjust default value as needed
-            min_samples = st.slider("Chọn số lượng điểm tối thiểu", 5, 20,
-                                    value=10)  # Adjust default value as needed
+            col1, col2 = st.columns(2)
+            with col1:
+                eps = st.number_input('Nhập epsilon', value=0.5)
+            with col2:
+                min_samples = st.number_input('Nhập số lượng điểm tối thiểu', value=10, step=1)  # Adjust default value as needed
 
             # Perform DBSCAN clustering
-            dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+            dbscan = DBSCAN(eps=eps, min_samples=min_samples, metric='euclidean')
             dbscan.fit(X_scaled)
 
             # Add cluster labels to the data
@@ -125,18 +137,30 @@ class Clustering:
 
         # Get the data for clustering
         X = data_copy[feature_columns]
+
+        option = st.selectbox(
+            "Chọn kiểu scale",
+            ("None", "Standard Scale", "Min-max Scale"),
+        )
+
         if not feature_columns:
             st.warning("Chon cot tinh nang")
         else:
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
+            if option == "None":
+                X_scaled = X
+            if option == "Standard Scale":
+                scaler = StandardScaler()
+                X_scaled = scaler.fit_transform(X)
+            if option == "Min-max Scale":
+                scaler = MinMaxScaler()
+                X_scaled = scaler.fit_transform(X)
 
             # Set OPTICS hyperparameters
             # Adjust default value as needed
-            min_samples = st.slider("Chọn số lượng điểm tối thiểu", 5, 20, value=10)  # Adjust default value as needed
+            min_samples = st.number_input('Nhập số lượng điểm tối thiểu', value=10, step=1) # Adjust default value as needed
 
             # Perform OPTICS clustering
-            optics = OPTICS(min_samples=min_samples, metric='euclidean')
+            optics = OPTICS(eps=0.5, min_samples=min_samples, metric='euclidean')
             optics.fit(X_scaled)
 
             # Extract DBSCAN-like clusters from the OPTICS output
@@ -160,5 +184,3 @@ class Clustering:
                 silhouette_avg = silhouette_score(X_scaled, optics.labels_)
                 st.markdown(f"Silhouette Score: {silhouette_avg:.4f}")
                 st.dataframe(X, use_container_width=True)
-
-
