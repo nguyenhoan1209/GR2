@@ -56,6 +56,9 @@ class Clustering:
                     fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
                     st.markdown("Number of Clusters: {}".format(n_clusters))
                     st.plotly_chart(fig, use_container_width=True)
+                    cluster_labels = X["cluster"]
+                    cluster_counts = cluster_labels.value_counts()
+                    st.write(cluster_counts)
                 else:
                     pass
 
@@ -118,6 +121,7 @@ class Clustering:
                 if len(feature_columns) <= 2:
                     fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
                     st.plotly_chart(fig, use_container_width=True)
+
                 else:
                     pass
 
