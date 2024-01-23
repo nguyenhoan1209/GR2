@@ -218,7 +218,7 @@ def main():
         st.sidebar.markdown("---")
         st.markdown("#### Chọn chức năng ####")
         selected = option_menu(None, ["Dữ liệu", "Thống kê", "Trực quan hóa", "Hồi quy", "Phân lớp", "Phân cụm"],
-                               icons=['clipboard-data', 'table', "bar-chart-fill", 'rulers', 'diamond-half'],
+                               icons=['clipboard-data', 'table', "bar-chart-fill", 'rulers', 'diamond-half', 'bi-exclude'],
                                menu_icon="cast", default_index=0, styles={
                 "st": {"padding": "5!important", "background-color": "#fafafa"},
                 "icon": {"color": "black", "font-size": "15px"},
