@@ -123,7 +123,7 @@ class Clustering:
                     st.plotly_chart(fig, use_container_width=True)
 
                 else:
-                    pass
+                    st.write("Hello")
 
             with col2:
                 st.markdown("##### Clustering Result Visualize #####")
@@ -181,7 +181,7 @@ class Clustering:
                     fig = px.scatter(X, x=X.iloc[:, 0], y=X.iloc[:, 1], color="cluster")
                     st.plotly_chart(fig, use_container_width=True)
                 else:
-                    pass
+                    st.write("Hello")
 
             with col2:
                 st.markdown("##### Clustering Result Visualize #####")

@@ -14,7 +14,7 @@ import pygwalker as pyg
 import streamlit.components.v1 as stc
 from modules import Chart, Info, Regression, Classification, Clustering
 
-st.set_page_config("DataApp", layout="wide", initial_sidebar_state="expanded", )
+st.set_page_config("FamiLearn",page_icon="image/sami.jpg",layout="wide", initial_sidebar_state="expanded" )
 
 
 def footer():

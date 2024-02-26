@@ -16,11 +16,11 @@
         },
         "start_date": {
           "year": "2023",
-          "month":"3"
+          "month":"10"
         },
         "text": {
-          "headline": "SAMI DATA APP",
-          "text": "<p>SAMI DATA APP hỗ trợ thống kê nhanh chóng-chính xác</p>"
+          "headline": "FaMI-LEARN",
+          "text": "<p>Hỗ trợ thống kê nhanh chóng-chính xác</p>"
         }
       },
       {
@@ -29,12 +29,12 @@
         },
         "start_date": {
           "year": "2023",
-          "month":"4"
+          "month":"11"
           
         },
         "text": {
-          "headline": "SAMI DATA APP",
-          "text": "SAMI DATA APP cung cấp đa dạng biểu đồ, linh hoạt trong trực quan hóa"
+          "headline": "FaMI-LEARN",
+          "text": "Cung cấp đa dạng biểu đồ, linh hoạt trong trực quan hóa"
         }
       },
       {
@@ -43,11 +43,11 @@
         },
         "start_date": {
           "year": "2023",
-          "month":"5"
+          "month":"12"
         },
         "text": {
-          "headline": "SAMI DATA APP",
-          "text": "SAMI DATA APP hỗ trợ các bài toán kiểm định giả thuyết từ cơ bản đến nâng cao"
+          "headline": "FaMI-LEARN",
+          "text": "Hỗ trợ các bài toán học máy nâng cao"
         }
       }
     ]
