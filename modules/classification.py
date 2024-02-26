@@ -230,7 +230,7 @@ class Classification:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         # Get the number of neighbors from the user
-        k = st.slider("Chọn số cây k", 1, 50, step=1)
+        k = st.slider("Chọn số cây k", 10, 200, step=10)
 
         # Create and train the KNN classifier
         knn = RandomForestClassifier(n_estimators=k)

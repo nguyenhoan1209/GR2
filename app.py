@@ -10,9 +10,11 @@ import os
 import plotly.graph_objects as go
 import scipy.stats as stats
 from scipy.stats import t
+import pygwalker as pyg
+import streamlit.components.v1 as stc
 from modules import Chart, Info, Regression, Classification, Clustering
 
-st.set_page_config("DataApp", layout="wide", initial_sidebar_state="expanded", )
+st.set_page_config("FamiLearn",page_icon="image/sami.jpg",layout="wide", initial_sidebar_state="expanded" )
 
 
 def footer():
@@ -205,7 +207,9 @@ def analyze_data(data):
 
 
 #### Data visualization
-
+def create_chart(data):
+    pyg_html = pyg.walk(data,return_html=True)
+    stc.html(pyg_html,scrolling=True,height=1000)
 #### hypothesis test
 
 # main function
@@ -247,11 +251,8 @@ def main():
                 st.write("Data")
                 with st.expander("See data", expanded=True):
                     edit_data = st.data_editor(data, use_container_width=True, num_rows="dynamic")
+                create_chart(edit_data)
                 st.markdown("---")
-                st.write("#### Chọn loại biểu đồ ####")
-                chart_type = st.selectbox("", ["Bar", "Line", "Scatter", "Pie", "Boxplot", "Heatmap"])
-
-                Chart.create_chart(chart_type, edit_data)
 
             if selected == 'Hồi quy':
                 search()
